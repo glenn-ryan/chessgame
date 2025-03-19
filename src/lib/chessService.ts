@@ -1,4 +1,4 @@
-import { Chess, Move } from 'chess.js';
+import { Chess, Move, Square } from 'chess.js';
 
 export interface ChessGameState {
   fen: string;
@@ -60,7 +60,6 @@ export class ChessService {
   public makeMove(from: string, to: string, promotion?: 'n' | 'b' | 'r' | 'q'): boolean {
     try {
       console.log(`ChessService.makeMove from ${from} to ${to}`);
-      const prevFen = this.game.fen();
       const move = this.game.move({
         from,
         to,
@@ -88,8 +87,8 @@ export class ChessService {
       
       console.log(`Move failed`);
       return false;
-    } catch (e) {
-      console.error(`Exception in makeMove: ${e}`);
+    } catch (_) {
+      console.error(`Exception in makeMove`);
       return false;
     }
   }
@@ -105,7 +104,7 @@ export class ChessService {
       }
       
       return !!move;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -130,7 +129,7 @@ export class ChessService {
         b: []
       };
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -139,15 +138,15 @@ export class ChessService {
     try {
       console.log(`Getting legal moves for square: ${square}`);
       const moves = this.game.moves({
-        square: square as any,
+        square: square as Square,
         verbose: true
       }) as Move[];
       
       const destinations = moves.map(move => move.to);
       console.log(`Legal destinations: ${JSON.stringify(destinations)}`);
       return destinations;
-    } catch (e) {
-      console.error(`Exception in getLegalMoves: ${e}`);
+    } catch (_) {
+      console.error(`Exception in getLegalMoves`);
       return [];
     }
   }
